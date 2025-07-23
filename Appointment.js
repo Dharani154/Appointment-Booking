@@ -7,14 +7,12 @@ const AppointmentBooker = () => {
   const [confirmationMessage, setConfirmationMessage] = useState('');
   const [adminTime, setAdminTime] = useState('');
 
-  // Working hours configuration
-  const WORKING_HOURS = {
-    start: 9, // 9 AM
-    end: 17,  // 5 PM
-    slotDuration: 30 // 30 minutes
-  };
 
-  // Generate all possible 30-minute slots within working hours
+  const WORKING_HOURS = {
+    start: 9, 
+    end: 17, 
+    slotDuration: 30 
+  };
   const generateTimeSlots = () => {
     const slots = [];
     const startTime = WORKING_HOURS.start * 60; // Convert to minutes
@@ -34,8 +32,6 @@ const AppointmentBooker = () => {
     
     return slots;
   };
-
-  // Format time to 12-hour format
   const formatTime12Hour = (hours, minutes) => {
     const period = hours >= 12 ? 'PM' : 'AM';
     const displayHours = hours > 12 ? hours - 12 : (hours === 0 ? 12 : hours);
@@ -43,31 +39,22 @@ const AppointmentBooker = () => {
   };
 
   const timeSlots = generateTimeSlots();
-
-  // Handle slot booking
   const handleSlotClick = (slotTime) => {
     if (bookedSlots.has(slotTime)) {
-      // Already booked - show message
       setConfirmationMessage(`This slot (${timeSlots.find(s => s.time === slotTime)?.display}) is already booked.`);
       setTimeout(() => setConfirmationMessage(''), 3000);
       return;
     }
-
-    // Book the slot
     setBookedSlots(prev => new Set([...prev, slotTime]));
     const displayTime = timeSlots.find(s => s.time === slotTime)?.display;
     setConfirmationMessage(`Appointment booked for ${displayTime}!`);
     setTimeout(() => setConfirmationMessage(''), 3000);
   };
-
-  // Handle date change - clear booked slots to simulate loading new day data
   const handleDateChange = (newDate) => {
     setSelectedDate(newDate);
-    setBookedSlots(new Set()); // Clear previous bookings when changing date
+    setBookedSlots(new Set()); 
     setConfirmationMessage('');
   };
-
-  // Admin function to pre-book slots
   const handleAdminBook = () => {
     if (!adminTime || !adminTime.match(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/)) {
       setConfirmationMessage('Please enter a valid time in HH:MM format (e.g., 14:00)');
@@ -76,8 +63,7 @@ const AppointmentBooker = () => {
     }
 
     const [hours, minutes] = adminTime.split(':').map(Number);
-    
-    // Check if time is within working hours
+  
     if (hours < WORKING_HOURS.start || hours >= WORKING_HOURS.end || minutes % 30 !== 0) {
       setConfirmationMessage(`Time must be within working hours (${WORKING_HOURS.start}:00-${WORKING_HOURS.end}:00) and align with 30-minute slots`);
       setTimeout(() => setConfirmationMessage(''), 3000);
@@ -102,7 +88,7 @@ const AppointmentBooker = () => {
   return (
     <div className="max-w-4xl mx-auto p-6 bg-gray-50 min-h-screen">
       <div className="bg-white rounded-lg shadow-lg p-8">
-        {/* Header */}
+        
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-800 mb-2">
             Appointment Booking System
@@ -110,7 +96,7 @@ const AppointmentBooker = () => {
           <p className="text-gray-600">Book your 30-minute appointment slot</p>
         </div>
 
-        {/* Date Picker */}
+      
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
             <Calendar className="w-5 h-5 text-blue-600" />
@@ -125,7 +111,7 @@ const AppointmentBooker = () => {
           />
         </div>
 
-        {/* Working Hours Display */}
+        
         <div className="mb-8 p-4 bg-blue-50 rounded-lg">
           <div className="flex items-center gap-2 mb-2">
             <Clock className="w-5 h-5 text-blue-600" />
@@ -144,7 +130,7 @@ const AppointmentBooker = () => {
           </p>
         </div>
 
-        {/* Confirmation Message */}
+        
         {confirmationMessage && (
           <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
             <div className="flex items-center gap-2">
@@ -154,7 +140,7 @@ const AppointmentBooker = () => {
           </div>
         )}
 
-        {/* Available Slots */}
+    
         <div className="mb-8">
           <h2 className="text-xl font-semibold text-gray-800 mb-4">Available Time Slots</h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
@@ -183,7 +169,7 @@ const AppointmentBooker = () => {
           </div>
         </div>
 
-        {/* Legend */}
+    
         <div className="mb-8 p-4 bg-gray-50 rounded-lg">
           <h3 className="font-semibold text-gray-800 mb-3">Legend</h3>
           <div className="flex flex-wrap gap-4">
@@ -198,7 +184,7 @@ const AppointmentBooker = () => {
           </div>
         </div>
 
-        {/* Admin Section */}
+      
         <div className="border-t pt-6">
           <div className="flex items-center gap-2 mb-4">
             <AlertCircle className="w-5 h-5 text-orange-600" />
@@ -229,7 +215,7 @@ const AppointmentBooker = () => {
           </p>
         </div>
 
-        {/* Booking Summary */}
+        
         {bookedSlots.size > 0 && (
           <div className="mt-8 p-4 bg-indigo-50 rounded-lg">
             <h3 className="font-semibold text-gray-800 mb-2">
